@@ -1,0 +1,17 @@
+<%= form_with model: @user do |form| %>
+
+<p>
+  <%= form.label "Username" %>
+  <%= form.text_field :username  %>
+</p>
+
+<p>
+  <%= form.label "Admin Rights:" %>
+  <%= form.check_box :is_admin %>
+</p>
+
+<p>
+  <%= form.submit %>
+</p>
+
+<% end %>
