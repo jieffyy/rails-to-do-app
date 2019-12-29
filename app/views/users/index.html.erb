@@ -1,5 +1,9 @@
 <h1>All Users</h1>
 
+<% if flash[:notice] %>
+<p><%= flash[:notice] %></p>
+<% end %>
+
 <table>
   <tr>
     <th>Username</th>
@@ -17,7 +21,9 @@
       <td><%= link_to 'Edit', edit_user_path(user) %></td>
       <td><%= link_to 'Delete', user_path(user),
               method: :delete,
-              data: {confirm: 'Are you sure?'} %></td>
+              data: {confirm: "Are you sure?\nThis will delete all tasks under this user."} %></td>
     </tr>
   <% end %>
 </table>
+
+<p><%= link_to "Logout", '/logout', method: :POST %></p>

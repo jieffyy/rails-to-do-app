@@ -1,0 +1,37 @@
+<h1>Showing All Tasks</h1>
+
+<% if flash[:notice] %>
+<p><%= flash[:notice] %></p>
+<% end %>
+
+<p>
+<%= @user.username %> has <%= pluralize(@tasks.count, "task") %><br>
+Admin: <%= cookies[:is_admin] %><br>
+<% if cookies[:is_admin] %><%= link_to "Users", '/users' %><% end %>
+</p>
+
+<p><%= link_to "New Task", new_task_path%></p>
+
+<table>
+  <tr>
+    <th>Taskname</th>
+    <th>Completed?</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @tasks.each do |task| %>
+    <tr>
+      <td><%= task.task_name %></td>
+      <td><%= task.is_complete %></td>
+      <td><%= link_to "Show", task_path(task) %></td>
+      <td><%= link_to "Edit", edit_task_path(task) %></td>
+      <td><%= link_to 'Delete', task_path(task),
+              method: :delete,
+              data: {confirm: "Are you sure?"} %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "Logout", '/logout', method: :POST %></p>

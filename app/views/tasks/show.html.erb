@@ -1,0 +1,25 @@
+<h1>Task Profile</h1>
+
+<p>
+  <strong>Task Name:</strong>
+  <%= @task.task_name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @task.task_desc %>
+</p>
+
+<p>
+  <strong>Due Date:</strong>
+  <%= @task.due_date %>
+</p>
+
+<p>
+  <strong>Completed:</strong>
+  <%= @task.is_complete %>
+</p>
+
+<p>
+  <%= link_to 'Back', tasks_path %>
+</p>

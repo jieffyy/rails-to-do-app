@@ -1,4 +1,8 @@
 class UsersController < ApplicationController
+  before_action :require_admin
+  skip_before_action :require_login, only: [:login, :create_session, :delete_session]
+  skip_before_action :require_admin, only: [:login, :create_session, :delete_session]
+
   def index
     @users = User.all
   end
@@ -42,8 +46,41 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
 
+  def login
+  end
+
+  def create_session
+    @user = User.find_by(username: params[:username])
+
+    if @user
+      flash[:notice] = "Welcome back! Below are your tasks."
+    else
+      @user = User.new(username: params[:username], is_admin: false)
+      flash[:notice] = "Hey you're new! Adding you as a non-admin user."
+      @user.save
+    end
+
+    cookies[:user_id] = @user.id
+    cookies[:is_admin] = @user.is_admin
+    redirect_to '/tasks' 
+
+  end
+
+  def delete_session
+    cookies.delete(:user_id)
+    cookies.delete(:is_admin)
+    redirect_to root_url
+  end
+
   private
     def user_params
       params.require(:user).permit(:username, :is_admin)
+    end
+
+    def require_admin
+      if cookies[:is_admin] == "false"
+        flash[:notice] = "Not authorised."
+        redirect_to "/tasks"
+      end
     end
 end
