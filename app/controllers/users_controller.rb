@@ -56,13 +56,18 @@ class UsersController < ApplicationController
       flash[:notice] = "Welcome back! Below are your tasks."
     else
       @user = User.new(username: params[:username], is_admin: false)
-      flash[:notice] = "Hey you're new! Adding you as a non-admin user."
-      @user.save
+      added = @user.save
+      if added
+        flash[:notice] = "Hey you're new! Adding you as a non-admin user."
+      else
+        flash[:notice] = "Username cannot be empty."
+        redirect_to root_url and return
+      end
     end
 
     cookies[:user_id] = @user.id
     cookies[:is_admin] = @user.is_admin
-    redirect_to '/tasks' 
+    redirect_to '/tasks'
 
   end
 
