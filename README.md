@@ -1,5 +1,12 @@
 # README
 
+## Details
+
+Name: Low Jie Feng\
+Matriculation Number: A0201747J
+
+## ToDoApp Details
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
