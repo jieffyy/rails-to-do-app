@@ -1,0 +1,12 @@
+<%= form_with model: [@task, @task.tags.build] do |form| %>
+
+<p>
+  <%= form.label "Tag Name" %>
+  <%= form.text_field :tag_name  %>
+</p>
+
+<p>
+  <%= form.submit %>
+</p>
+
+<% end %>

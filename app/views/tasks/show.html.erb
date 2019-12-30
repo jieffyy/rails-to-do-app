@@ -1,5 +1,8 @@
-<h1>Task Profile</h1>
+<% if flash[:notice] %>
+<p><%= flash[:notice] %></p>
+<% end %>
 
+<h1>Task Profile</h1>
 <p>
   <strong>Task Name:</strong>
   <%= @task.task_name %>
@@ -19,6 +22,20 @@
   <strong>Completed:</strong>
   <%= @task.is_complete %>
 </p>
+
+<h3>Current tags:</h3>
+  <table>
+    <tr>
+      <th>Tag</th>
+      <th></th>
+    </tr>
+
+    <%= render @task.tags %>
+    
+  </table>
+
+<h3>Add a tag: </h3>
+<%= render 'tags/form' %>
 
 <p>
   <%= link_to 'Back', tasks_path %>

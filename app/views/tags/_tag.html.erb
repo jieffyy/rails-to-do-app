@@ -1,0 +1,6 @@
+  <tr>
+    <td><%= tag.tag_name %></td>
+    <td><%= link_to 'Delete', [@task, tag],
+            method: :delete,
+            data: {confirm: "Are you sure?"} %></td>
+  </tr>

@@ -1,4 +1,4 @@
-# README
+# CVWO 2019/2020: React on Rails - ToDoApp
 
 ## Details
 
