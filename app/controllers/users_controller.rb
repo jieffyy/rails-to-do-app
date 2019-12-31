@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :require_admin
-  skip_before_action :require_login, only: [:login, :create_session, :delete_session]
-  skip_before_action :require_admin, only: [:login, :create_session, :delete_session]
+  # before_action :require_admin
+  # skip_before_action :require_login, only: [:login, :create_session, :delete_session]
+  # skip_before_action :require_admin, only: [:login, :create_session, :delete_session]
 
   def index
     @users = User.all
@@ -47,6 +47,10 @@ class UsersController < ApplicationController
   end
 
   def login
+    if cookies[:user_id]
+      @user = User.find(cookies[:user_id])
+      @tasks = @user.tasks
+    end
   end
 
   def create_session
@@ -59,15 +63,25 @@ class UsersController < ApplicationController
       added = @user.save
       if added
         flash[:notice] = "Hey you're new! Adding you as a non-admin user."
+        
+        # Copy session's tasks into db and unload session[:tasks]
+        if session[:tasks].any?
+          session[:tasks].each do |sf|
+            @user.tasks.new(sf).save
+          end
+          session.delete(:tasks)
+        end
+
       else
         flash[:notice] = "Username cannot be empty."
         redirect_to root_url and return
       end
+
     end
 
     cookies[:user_id] = @user.id
     cookies[:is_admin] = @user.is_admin
-    redirect_to '/tasks'
+    redirect_to root_url
 
   end
 

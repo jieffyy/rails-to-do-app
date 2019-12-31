@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get 'login', to: 'users#login'
   post 'login', to: 'users#create_session'
-  post 'logout', to: 'users#delete_session'
+  get 'logout', to: 'users#delete_session'
 
   resources :tasks do
     resources :tags

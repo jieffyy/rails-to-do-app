@@ -1,1 +1,1 @@
-<%= react_component "form/LoginForm", { submit_url: '/login', csrf: form_authenticity_token, notice: flash[:notice]} %>
+<%= react_component "Main", {csrf: form_authenticity_token, notice: flash[:notice], user: @user} %>

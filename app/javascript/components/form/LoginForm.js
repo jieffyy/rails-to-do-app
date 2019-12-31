@@ -1,39 +1,51 @@
 import React from "react"
-import Card from "react-bootstrap/Card"
-import Button from "react-bootstrap/Button"
-import Form from "react-bootstrap/Form"
-import Container from "react-bootstrap/Container"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
+import PropTypes from "prop-types"
+import {Container, Row, Col, Card, Form, Button} from "react-bootstrap"
 import Notice from "../Notice"
-import 'bootstrap/dist/css/bootstrap.min.css'
+
+function LoggedIn(props) {
+  try {
+    // render user profile
+    return (
+      <Card.Body>
+        <Card.Title>Welcome {props.user.username}!</Card.Title>
+        <Card.Text><a href="/logout">Logout</a></Card.Text>
+      </Card.Body>
+    );
+  }
+  catch (TypeError) {
+    // render login page
+    return (
+      <Card.Body>
+        <Notice notice={props.notice} variant="warning"/>
+        <Form method="POST" action="/login">
+          <Form.Group>
+          <Form.Label>Username:</Form.Label>
+          <Form.Control type="text" placeholder="Enter username" name="username" />
+          </Form.Group>
+          <input type="hidden" name="authenticity_token" value={props.csrf}></input>
+          <Button variant="dark" type="submit">Login</Button>
+        </Form>
+      </Card.Body>
+      );
+  }
+}
 
 class LoginForm extends React.Component {
   render () {
     return (
-      <Container>
-      <Row>
-        <Col sm={{span: 4, offset: 4}}>
-          <Card bg="dark" text="white">
-          <Card.Header>Login</Card.Header>
-            <Notice notice={this.props.notice} variant="warning"/>
-          <Card.Body>
-            <Form method="POST" action={this.props.submit_url}>
-              <Form.Group controlId ="formUsername">
-              <Form.Label>Username:</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" name="username" />
-              </Form.Group>
-              <input type="hidden" name="authenticity_token" value={this.props.csrf}></input>
-              <Button variant="light" type="submit">Login</Button>
-            </Form>
-          </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-
-      </Container>
+      <Card bg="light">
+      <Card.Header> {this.props.user ? "User Profile" : "Login"} </Card.Header>
+      <LoggedIn csrf={this.props.csrf} notice={this.props.notice} user={this.props.user} />
+      </Card>
     );
   }
+}
+
+LoginForm.propTypes = {
+  notice: PropTypes.string,
+  csrf: PropTypes.string,
+  user: PropTypes.object
 }
 
 export default LoginForm
