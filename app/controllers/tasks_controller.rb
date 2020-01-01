@@ -33,6 +33,7 @@ class TasksController < ApplicationController
       end
     else
       session[:tasks] ||= {}
+      @task["id"] = session[:tasks].length + 1
       session[:tasks][@task.attributes.to_json] = tags_xs
     end
 
@@ -50,10 +51,20 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
-    @task.destroy
-
-    redirect_to tasks_path
+    if cookies[:user_id]
+      @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
+      if @task
+        if @task.destroy
+          flash[:notice] = "Task deleted"
+        else
+          flash[:notice] = "Couldn't delete this task"
+        end
+      else
+        flash[:notice] = "Task Not Found"
+      end
+    else
+      session[:tasks].delete(:task_id)
+    end
   end
 
   private

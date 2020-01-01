@@ -77,6 +77,7 @@ class UsersController < ApplicationController
     if session[:tasks]
       session[:tasks].each do |task, value|
         task_hash = JSON.parse(task)
+        task_hash.delete("id")
         @task = @user.tasks.create(task_hash)
         value.each do |tag_name|
           @tag = _save_tag(tag_name)

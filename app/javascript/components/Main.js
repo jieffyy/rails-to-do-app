@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import { Container, Row, Col } from "react-bootstrap"
 import LoginForm from "./form/LoginForm"
 import TaskForm from "./form/TaskForm"
-import TaskIndex from "./form/TaskIndex"
+import TaskIndex from "./task_index/TaskIndex"
 
 class Main extends React.Component {
   render() {
@@ -14,7 +14,7 @@ class Main extends React.Component {
           <Col sm="8"><TaskForm csrf={this.props.csrf} notice={this.props.notice} user={this.props.user}/></Col>
         </Row>
         <Row className="my-3">
-          <Col><TaskIndex tasks={this.props.tasks}/></Col>
+          <Col><TaskIndex tasks={this.props.tasks} csrf={this.props.csrf} /></Col>
         </Row>
       </Container>
     );
