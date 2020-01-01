@@ -13,24 +13,30 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    tags_xs = JSON.parse(params[:tags_arr])
+    params.delete(:tags_arr)
+    params.delete(:authenticity_token)  
 
+    # Write to db if logged in, if not write to sessions[:tasks]
+    @task = Task.new(task_params)
     if cookies[:user_id]
-      # Write to db with user_id
       @task.user_id = cookies[:user_id]
       @task.is_complete = false
       if @task.save
         flash[:notice] = "Saved!"
+        tags_xs.each do |tag_name|
+          @tag = _save_tag(tag_name)
+          @task.tags << @tag
+        end
       else
         flash[:notice] = "Sth went wrong."
       end
     else
-      # Write to sessions[:tasks]
-      session[:tasks] ||= []
-      session[:tasks] << @task
+      session[:tasks] ||= {}
+      session[:tasks][@task.attributes.to_json] = tags_xs
     end
 
-      redirect_to root_url
+    redirect_to root_url
   end
 
   def update

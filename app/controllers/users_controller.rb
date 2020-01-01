@@ -50,35 +50,43 @@ class UsersController < ApplicationController
     if cookies[:user_id]
       @user = User.find(cookies[:user_id])
       @tasks = @user.tasks
+    elsif session[:tasks]
+      puts "Log"
+      @tasks = session[:tasks].keys.map{ |t| JSON.parse(t) }
     end
   end
 
   def create_session
     @user = User.find_by(username: params[:username])
 
+    # Find the user or register them
     if @user
-      flash[:notice] = "Welcome back! Below are your tasks."
+      flash[:notice] = "Welcome back!"
     else
       @user = User.new(username: params[:username], is_admin: false)
       added = @user.save
       if added
         flash[:notice] = "Hey you're new! Adding you as a non-admin user."
-        
-        # Copy session's tasks into db and unload session[:tasks]
-        if session[:tasks].any?
-          session[:tasks].each do |sf|
-            @user.tasks.new(sf).save
-          end
-          session.delete(:tasks)
-        end
-
       else
         flash[:notice] = "Username cannot be empty."
         redirect_to root_url and return
       end
-
     end
 
+    # Copy session's tasks into db and unload session[:tasks]
+    if session[:tasks]
+      session[:tasks].each do |task, value|
+        task_hash = JSON.parse(task)
+        @task = @user.tasks.create(task_hash)
+        value.each do |tag_name|
+          @tag = _save_tag(tag_name)
+          @task.tags << @tag
+        end
+      end
+      session.delete(:tasks)
+    end
+
+    # Load into cookies
     cookies[:user_id] = @user.id
     cookies[:is_admin] = @user.is_admin
     redirect_to root_url
