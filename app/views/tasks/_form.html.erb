@@ -1,27 +1,3 @@
-<%= form_with model: @task do |form| %>
-
-<p>
-  <%= form.label "Task Name" %>
-  <%= form.text_field :task_name  %>
-</p>
-
-<p>
-  <%= form.label "Description" %>
-  <%= form.text_area :task_desc %>
-</p>
-
-<p>
-  <%= form.label "Due Date" %>
-  <%= form.datetime_field :due_date %>
-</p>
-
-<p>
-  <%= form.label "Completed" %>
-  <%= form.check_box :is_complete %>
-</p>
-
-<p>
-  <%= form.submit %>
-</p>
-
-<% end %>
+<%= react_component "task_form/TaskForm", {csrf: form_authenticity_token, 
+                                           task: @task,
+                                           action: params[:action]} %>

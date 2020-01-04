@@ -3,59 +3,24 @@ class UsersController < ApplicationController
   # skip_before_action :require_login, only: [:login, :create_session, :delete_session]
   # skip_before_action :require_admin, only: [:login, :create_session, :delete_session]
 
-  def index
-    @users = User.all
-  end
-
-  def show
-    @user = User.find(params[:id])
-  end
-
-  def new
-    @user = User.new
-  end
-
-  def edit
-    @user = User.find(params[:id])
-  end
-
-  def create
-    @user = User.new(user_params)
-
-    if @user.save
-      redirect_to @user
-    else
-      render 'new'
-    end
-  end
-
-  def update
-    @user = User.find(params[:id])
-
-    if @user.update(user_params)
-      redirect_to @user
-    else
-      render 'edit'
-    end
-  end
-
-  def destroy
-    @user = User.find(params[:id])
-    @user.destroy
-
-    redirect_to users_path
-  end
-
+  # Loads the main summary page
   def login
+    @tasks = {}
     if cookies[:user_id]
       @user = User.find(cookies[:user_id])
-      @tasks = @user.tasks
-    elsif session[:tasks]
-      puts "Log"
-      @tasks = session[:tasks].keys.map{ |t| JSON.parse(t) }
+      @user.tasks.each do |task_obj|
+        @tasks[task_obj.id] = {"tasks" => {}, "tags" => {}}
+        @tasks[task_obj.id]["tasks"] = task_obj.as_json
+        tag_xs = []
+        task_obj.tags.each do |tag_obj|
+          tag_xs.push(tag_obj.tag_name)
+        end
+        @tasks[task_obj.id]["tags"] = tag_xs
+      end
     end
   end
 
+  # Routed by Main -> Login Button
   def create_session
     @user = User.find_by(username: params[:username])
 
@@ -73,30 +38,28 @@ class UsersController < ApplicationController
       end
     end
 
-    # Copy session's tasks into db and unload session[:tasks]
-    if session[:tasks]
-      session[:tasks].each do |task, value|
-        task_hash = JSON.parse(task)
-        task_hash.delete("id")
-        @task = @user.tasks.create(task_hash)
-        value.each do |tag_name|
-          @tag = _save_tag(tag_name)
-          @task.tags << @tag
-        end
+    # If there is a guest flag, change the tasks under the guest to belong to
+    # the user
+    if cookies[:is_guest]
+      @user = User.find_by()
+      @user.tasks.each do |task|
+        task.update(user_id = @user.id)
       end
-      session.delete(:tasks)
     end
 
     # Load into cookies
     cookies[:user_id] = @user.id
     cookies[:is_admin] = @user.is_admin
+    cookies.delete(:is_guest)
     redirect_to root_url
 
   end
 
+  # Routed by Main -> Logout Button
   def delete_session
     cookies.delete(:user_id)
     cookies.delete(:is_admin)
+    cookies.delete(:is_guest)
     redirect_to root_url
   end
 

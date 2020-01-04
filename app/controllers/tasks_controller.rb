@@ -1,74 +1,94 @@
+require 'securerandom'
+
 class TasksController < ApplicationController
-  def index
-    @user = User.find(cookies[:user_id])
-    @tasks = Task.where(user_id: cookies[:user_id])
-  end
-
+  # Routes from: Main -> TaskIndex -> Show
   def show
-    @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
+    task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
+    @task = task.as_json
+    @task[:tags] = []
+    task.tags.each do |t|
+      @task[:tags] << t.tag_name
+    end
   end
 
+  # Routes from: Main -> TaskIndex -> Edit
   def edit
-    @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
+    task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
+    @task = task.as_json
+    @task[:tags] = []
+    task.tags.each do |t|
+      @task[:tags] << t.tag_name
+    end
   end
 
+  # Routes from Main -> TaskForm -> New Task
   def create
-    tags_xs = JSON.parse(params[:tags_arr])
-    params.delete(:tags_arr)
-    params.delete(:authenticity_token)  
+    tags_xs = params[:tags]
+    params.delete(:tags)
+    params.delete(:task)
 
-    # Write to db if logged in, if not write to sessions[:tasks]
-    @task = Task.new(task_params)
-    if cookies[:user_id]
-      @task.user_id = cookies[:user_id]
-      @task.is_complete = false
-      if @task.save
-        flash[:notice] = "Saved!"
-        tags_xs.each do |tag_name|
-          @tag = _save_tag(tag_name)
-          @task.tags << @tag
-        end
-      else
-        flash[:notice] = "Sth went wrong."
-      end
+    # Write to db if logged in, if not 
+    # if it is the first task, create a new user with a username generated randomly
+    if !cookies[:user_id]
+      username = SecureRandom.uuid
+      @user = User.create!(username: username, is_admin: false)
+      cookies[:user_id] = @user.id
+      cookies[:is_guest] = true
     else
-      session[:tasks] ||= {}
-      @task["id"] = session[:tasks].length + 1
-      session[:tasks][@task.attributes.to_json] = tags_xs
+      @user = User.find(cookies[:user_id])
     end
 
-    redirect_to root_url
+    @task = Task.new(params.permit(:task_name, :due_date, :task_desc))
+    @task.user_id = cookies[:user_id]
+    @task.is_complete = false
+    if @task.save
+      flash[:notice] = "Saved!"
+      tags_xs.each do |tag_name|
+        @tag = save_tag(tag_name)
+        @task.tags << @tag
+      end
+    else
+      flash[:notice] = "Sth went wrong."
+    end
+ 
   end
 
+  # Routes from TaskForm -> Update Task (which is from tasks#edit's render)
   def update
-    @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
+    tags_xs = params[:tags]
+    params.delete(:tags)
+    params.delete(:task)
 
-    if @task.update(task_params)
-      redirect_to @task
+    @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])    
+    tags_xs.each do |tag_name|
+      @tag = save_tag(tag_name)
+      @task.tags << @tag
+    end
+
+    params.delete(:id)
+    if @task.update(params.permit(:task_name, :task_desc, :due_date, :is_complete))
+      flash[:notice] = "Task Updated"
     else
       render 'edit'
     end
   end
 
+  # Routes from: Main -> TaskIndex -> Delete
   def destroy
-    if cookies[:user_id]
-      @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
-      if @task
-        if @task.destroy
-          flash[:notice] = "Task deleted"
-        else
-          flash[:notice] = "Couldn't delete this task"
-        end
-      else
-        flash[:notice] = "Task Not Found"
-      end
-    else
-      session[:tasks].delete(:task_id)
+    @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])
+    if @task.destroy
+      flash[:notice] = "Task Deleted"
     end
   end
 
   private
-    def task_params
-      params.permit(:task_name, :due_date, :task_desc)
+    # Helper method to save tags
+    def save_tag(tag_name)
+      @tag = Tag.find_by(:tag_name => tag_name)
+      if !@tag
+        Tag.create(:tag_name => tag_name)
+        @tag = Tag.find_by(:tag_name => tag_name)
+      end 
+      return @tag
     end
 end

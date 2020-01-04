@@ -1,1 +1,2 @@
-<%= react_component "Main", {csrf: form_authenticity_token, notice: flash[:notice], user: @user, tasks: @tasks} %>
+<%= react_component "Main", {csrf: form_authenticity_token, notice: flash[:notice], user: @user} %>
+<%= react_component "task_index/TaskIndex", {csrf: form_authenticity_token, tasks: @tasks} %>
