@@ -5,9 +5,15 @@ import {Form, Button} from "react-bootstrap"
 
 function LoggedIn(props) {
   if (props.user) {
-    return (
-      <a href="/logout">Logout</a>
-    );
+    if (props.user.is_guest) {
+      return (
+        <LoggedIn csrf={props.csrf} />
+      );
+    } else {
+      return (
+        <a href="/logout">Logout</a>
+      );
+    }
   } else {
     return (
     <Form method="POST" action="/login">
@@ -26,7 +32,11 @@ class LoginForm extends React.Component {
   render () {
     return (
       <>
-      <h1>{this.props.user ? "@" + this.props.user.username : "Login"}</h1>
+      <h1>{this.props.user 
+            ? this.props.user.is_guest 
+              ? "Login"
+              : "@" + this.props.user.username 
+            : "Login"}</h1>
       <LoggedIn csrf={this.props.csrf} user={this.props.user} />
       </>
     );

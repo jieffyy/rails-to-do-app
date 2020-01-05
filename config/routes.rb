@@ -4,9 +4,10 @@ Rails.application.routes.draw do
   post 'login', to: 'users#create_session'
   get 'logout', to: 'users#delete_session'
 
-  resources :tasks do
-    resources :tags
+  resources :tasks, except: [:index, :new] do
+    resource :tags, only: [:create]
   end
+  delete '/tasks/:task_id/tags/:tag_name', to: 'tags#destroy'
   
   resources :users
   

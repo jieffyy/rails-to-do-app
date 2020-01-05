@@ -25,32 +25,35 @@ class UsersController < ApplicationController
     @user = User.find_by(username: params[:username])
 
     # Find the user or register them
-    if @user
+    if params[:username] == ""
+      flash[:notice] = "Username cannot be empty."
+      redirect_to root_url and return
+    elsif @user
       flash[:notice] = "Welcome back!"
-    else
-      @user = User.new(username: params[:username], is_admin: false)
-      added = @user.save
-      if added
-        flash[:notice] = "Hey you're new! Adding you as a non-admin user."
-      else
-        flash[:notice] = "Username cannot be empty."
-        redirect_to root_url and return
+      if cookies[:user_id]
+        tmp_user = User.find(cookies[:user_id])
+        tmp_user.tasks.each do |t|
+          t.user_id = @user.id
+          t.save!
+        end
       end
-    end
-
-    # If there is a guest flag, change the tasks under the guest to belong to
-    # the user
-    if cookies[:is_guest]
-      @user = User.find_by()
-      @user.tasks.each do |task|
-        task.update(user_id = @user.id)
+    elsif cookies[:user_id]
+      @user = User.find(cookies[:user_id])
+      @user.username = params[:username]
+      @user.is_guest = false
+      if @user.save
+        flash[:notice] = "Hey you're new! Adding you as a non-admin user."
+      end
+    else
+      @user = User.create(username: params[:username], is_guest: false, is_admin: false)
+      if @user.save
+        flash[:notice] = "Hey you're new! Adding you as a non-admin user."
       end
     end
 
     # Load into cookies
     cookies[:user_id] = @user.id
     cookies[:is_admin] = @user.is_admin
-    cookies.delete(:is_guest)
     redirect_to root_url
 
   end

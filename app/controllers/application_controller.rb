@@ -8,4 +8,11 @@ class ApplicationController < ActionController::Base
   #       redirect_to root_url
   #     end
   #   end
+
+  private
+    def push_to_task(task, tag)
+      if !task.tags.exists?(tag.id)
+        task.tags << tag
+      end
+    end
 end

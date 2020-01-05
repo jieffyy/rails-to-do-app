@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Badge, Row, Col, Form, Button} from 'react-bootstrap'
 
 function TagArr(props) {
@@ -28,9 +28,40 @@ function TagForm(props) {
   };
 }
 
+function TagManager(props) {
+  if (props.action !== "new" && props.tags.length > 0) {
+    const tags_man = props.action === "edit"
+      ? props.tags.map(tag => (
+        <Row key={tag}>
+          <Col sm="1" >{tag}</Col>
+          {/* <Col sm="1"><a href="" onClick={e => props.edit(tag)}>Edit</a></Col> */}
+          <Col sm="1"><a href="" onClick={e => props.delete(tag, true)}>Delete</a></Col>
+        </Row>
+        ))
+      : props.tags.map(tag => (
+        <Row key={tag}>
+          <Col sm="1">{tag}</Col>
+          <Col sm="1"><a href="" onClick={e => props.delete(tag)}>Delete</a></Col>
+        </Row>
+      ));
+
+    return (
+      <Form.Row>
+        <Form.Group as={Col}>
+          <Form.Label as={Row}>Tags Manager</Form.Label>
+          {tags_man}
+        </Form.Group>
+      </Form.Row>
+    );
+  } else {
+    return null;
+  }
+}
+
 class Tags extends React.Component {
   render () {
     return (
+      <>
       <Form.Row>
       <Form.Group as={Col}>
         <Form.Label as={Row}>Tags</Form.Label>
@@ -41,6 +72,8 @@ class Tags extends React.Component {
                value={this.props.input_val} readOnly={this.props.readOnly} />
       </Form.Group>
       </Form.Row>
+      <TagManager action={this.props.action} tags={this.props.tags} edit={this.props.editTag} delete={this.props.deleteTag}/>
+      </>
     );
   }
 }

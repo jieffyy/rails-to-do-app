@@ -1,35 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Container, Form} from 'react-bootstrap'
-import {TaskName, DueDate, TaskDesc} from './TaskFormComponents'
+import {TaskName, DueDate, DueTime, TaskDesc} from './TaskFormComponents'
 import Tags from './Tags'
 import ButtonRow from './ButtonRow'
 
 class TaskForm extends React.Component {
   constructor(props) {
     super(props);
-    if (props.task) {
-      this.new_task = {"task_name": props.task.task_name,
-                       "due_date": props.task.due_date,
-                       "task_desc": props.task.task_desc,
-                       "tags": props.task.tags
-                      }
-    } else {
-      this.new_task = {"task_name": "",
-                       "due_date": "",
-                       "task_desc": "",
-                       "tags": []};
-    }
+    this.getCurrDateTime = this.getCurrDateTime.bind(this);
     this.readOnly = props.action === "show" ? true : false;
     this.changeTaskName = this.changeTaskName.bind(this);
     this.changeDueDate = this.changeDueDate.bind(this);
+    this.changeDueTime = this.changeDueTime.bind(this);
     this.changeTaskDesc = this.changeTaskDesc.bind(this);
     this.changeTag = this.changeTag.bind(this);
     this.appendTag = this.appendTag.bind(this);
+    this.editTag = this.editTag.bind(this);
+    this.deleteTag = this.deleteTag.bind(this);
     this.submit = this.sendSubmit.bind(this);
     this.edit = this.sendUpdate.bind(this);
     this.delete = this.sendDestroy.bind(this);
     this.reset = this.reset.bind(this);
+    if (props.task) {
+      this.new_task = {"task_name": props.task.task_name,
+                       "due_date": props.task.due_date,
+                       "due_time": props.task.due_time.slice(11, 16),
+                       "task_desc": props.task.task_desc,
+                       "tags": props.task.tags
+                      }
+    } else {
+      const date_time = this.getCurrDateTime();
+      this.new_task = {"task_name": "",
+                       "due_date": date_time[0],
+                       "due_time" : date_time[1],
+                       "task_desc": "",
+                       "tags": []};
+    }
     this.state = {
       task: this.new_task,
       curr_tag: ""
@@ -88,26 +95,77 @@ class TaskForm extends React.Component {
     this.setState({task: this.new_task});
   }
 
+  changeDueTime(e) {
+    this.new_task["due_time"] = e.target.value;
+    this.setState({task: this.new_task});
+  }
+
   changeTaskDesc(e) {
     this.new_task["task_desc"] = e.target.value;
     this.setState({task: this.new_task});
+  }
+
+  reset(e) {
+    const date_time = this.getCurrDateTime();
+    this.setState({task: {"task_name": "",
+                          "due_date": date_time[0],
+                          "due_time": date_time[1],
+                          "task_desc": "",
+                          "tags": []},
+                  curr_tag: ""});
   }
 
   changeTag(e) {
     this.setState({curr_tag: e.target.value});
   }
 
-  reset(e) {
-    this.setState({task: {"task_name": "",
-                          "due_date": "",
-                          "task_desc": "",
-                          "tags": []}
-                  });
-  }
-
   appendTag(e) {
+    for (let i = 0; i < this.new_task.tags.length; i++) {
+      if (this.new_task.tags[i] === this.state.curr_tag) {
+        this.setState({curr_tag: ""});
+        console.log("Repeated tag!");
+        return;
+      }
+    }
+    if (this.props.action === "edit") {
+      console.log("updating a task's tag!");
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/tasks/" + this.props.task.id + "/tags");
+      xhr.setRequestHeader("X-CSRF-TOKEN", this.props.csrf);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({tag_name: this.state.curr_tag}));
+    }
+
     this.new_task["tags"].push(this.state.curr_tag);
     this.setState({task: this.new_task, curr_tag: ""});
+  }
+
+  editTag(tag_name) {
+    this.deleteTag(tag_name, false);
+    this.setState({curr_tag: tag_name});
+  }
+
+  deleteTag(tag_name, flag_cfm) {
+    const cfm = flag_cfm ? confirm("Deleting a tag. Are you sure?") : true;
+    if (cfm) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("DELETE", "/tasks/" + this.props.task.id + "/tags/" + tag_name);
+      xhr.setRequestHeader("X-CSRF-TOKEN", this.props.csrf);
+      xhr.send();
+      this.new_task["tags"] = this.state.task.tags.filter(t_name => t_name !== tag_name);
+      this.setState({task: this.new_task});
+    }
+  }
+
+  getCurrDateTime() {
+    var date_obj = new Date();
+    var date_str = date_obj.toLocaleDateString(undefined, {year: 'numeric', month: '2-digit', day: '2-digit'});
+    const date = date_str.slice(6, 10) + "-" + date_str.slice(3, 5) + "-" + date_str.slice(0, 2);
+    var time_str = date_obj.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+    const time = time_str.slice(-1, -3) === "AM" 
+                ? time_str.slice(0, 5)
+                : (parseInt(time_str.slice(0, 2)) + 12).toString() + time_str.slice(2, 5);
+    return [date, time];
   }
 
   render() {
@@ -115,11 +173,15 @@ class TaskForm extends React.Component {
       <Container>
         <Form>
           <TaskName onChange={this.changeTaskName} task_name={this.state.task["task_name"]} readOnly={this.readOnly} />
-          <DueDate onChange={this.changeDueDate} due_date={this.state.task["due_date"]} readOnly={this.readOnly} />
+          <Form.Row>
+            <DueDate onChange={this.changeDueDate} due_date={this.state.task["due_date"]} readOnly={this.readOnly} />
+            <DueTime onChange={this.changeDueTime} due_time={this.state.task["due_time"]} readOnly={this.readOnly} />
+          </Form.Row>
           <TaskDesc onChange={this.changeTaskDesc} task_desc={this.state.task["task_desc"]} readOnly={this.readOnly}/>
           <Tags onChange={this.changeTag} onClick={this.appendTag} 
                 tags={this.new_task.tags} input_val={this.state.curr_tag} 
-                readOnly={this.readOnly} />
+                readOnly={this.readOnly} action={this.props.action} 
+                editTag={this.editTag} deleteTag={this.deleteTag} />
           <ButtonRow flag={this.props.action} submit={this.submit} edit={this.edit} delete={this.delete} reset={this.reset} />
         </Form>
       </Container>

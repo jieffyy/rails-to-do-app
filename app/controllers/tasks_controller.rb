@@ -31,24 +31,23 @@ class TasksController < ApplicationController
     # if it is the first task, create a new user with a username generated randomly
     if !cookies[:user_id]
       username = SecureRandom.uuid
-      @user = User.create!(username: username, is_admin: false)
+      @user = User.create!(username: username, is_admin: false, is_guest: true)
       cookies[:user_id] = @user.id
-      cookies[:is_guest] = true
     else
       @user = User.find(cookies[:user_id])
     end
 
-    @task = Task.new(params.permit(:task_name, :due_date, :task_desc))
+    @task = Task.new(params.permit(:task_name, :due_date, :due_time, :task_desc))
     @task.user_id = cookies[:user_id]
     @task.is_complete = false
     if @task.save
       flash[:notice] = "Saved!"
       tags_xs.each do |tag_name|
         @tag = save_tag(tag_name)
-        @task.tags << @tag
+        push_to_task(@task, @tag)
       end
     else
-      flash[:notice] = "Sth went wrong."
+      flash[:notice] = "Task Name cannot be empty."
     end
  
   end
@@ -62,11 +61,11 @@ class TasksController < ApplicationController
     @task = Task.find_by(user_id: cookies[:user_id], id: params[:id])    
     tags_xs.each do |tag_name|
       @tag = save_tag(tag_name)
-      @task.tags << @tag
+      push_to_task(@task, @tag)
     end
 
     params.delete(:id)
-    if @task.update(params.permit(:task_name, :task_desc, :due_date, :is_complete))
+    if @task.update(params.permit(:task_name, :task_desc, :due_date, :due_time, :is_complete))
       flash[:notice] = "Task Updated"
     else
       render 'edit'
