@@ -8,7 +8,7 @@ import TaskForm from "./task_form/TaskForm"
 class Main extends React.Component {
   render() {
     return (
-      <Container>
+      <Container className="pl-0">
         <Row style={{alignItems: "center"}} className="my-3">
           <Col sm="4">
             <Notice notice={this.props.notice} variant="warning"/>

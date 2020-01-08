@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {Badge, Row, Col, Form, Button} from 'react-bootstrap'
+import React from 'react'
+import {Badge, Row, Col, Form, Button, InputGroup} from 'react-bootstrap'
 
 function TagArr(props) {
   if (props.tag_arr.length > 0) {
@@ -17,12 +17,14 @@ function TagForm(props) {
   } else {
     return (
       <Row>
-        <Col sm="6" className="pr-0">
+      <Col sm="8">
+        <InputGroup>
           <Form.Control type="text" placeholder="New tag" value={props.value} onChange={props.onChange} />
-        </Col>
-        <Col sm="6"className="pl-0">
-          <Button variant="secondary" onClick={props.onClick}>Tag</Button>
-        </Col>
+          <InputGroup.Append>
+            <Button variant="secondary" onClick={props.onClick}>Tag</Button>
+          </InputGroup.Append>
+        </InputGroup>
+      </Col>
       </Row>
     );
   };
@@ -30,26 +32,20 @@ function TagForm(props) {
 
 function TagManager(props) {
   if (props.action !== "new" && props.tags.length > 0) {
-    const tags_man = props.action === "edit"
-      ? props.tags.map(tag => (
-        <Row key={tag}>
-          <Col sm="1" >{tag}</Col>
-          {/* <Col sm="1"><a href="" onClick={e => props.edit(tag)}>Edit</a></Col> */}
-          <Col sm="1"><a href="" onClick={e => props.delete(tag, true)}>Delete</a></Col>
-        </Row>
-        ))
-      : props.tags.map(tag => (
-        <Row key={tag}>
-          <Col sm="1">{tag}</Col>
-          <Col sm="1"><a href="" onClick={e => props.delete(tag)}>Delete</a></Col>
-        </Row>
-      ));
+    const tags_man = props.tags.map(tag => 
+      <InputGroup key={tag}>
+        <Form.Control type="text" value={tag} disabled plaintext />
+        <InputGroup.Append>
+          <Button variant="outline-secondary" onClick={e => props.delete(tag, true)}>Delete</Button>
+        </InputGroup.Append>
+      </InputGroup>
+    );
 
     return (
       <Form.Row>
         <Form.Group as={Col}>
           <Form.Label as={Row}>Tags Manager</Form.Label>
-          {tags_man}
+          <Col sm="4" className="pl-0">{tags_man}</Col>
         </Form.Group>
       </Form.Row>
     );
@@ -79,4 +75,4 @@ class Tags extends React.Component {
 }
 
 
-export default Tags
+export {Tags, TagArr}

@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Container, Form} from 'react-bootstrap'
+import {Container, Row, Col, Form, Button} from 'react-bootstrap'
 import {TaskName, DueDate, DueTime, TaskDesc} from './TaskFormComponents'
-import Tags from './Tags'
+import {Tags} from './Tags'
 import ButtonRow from './ButtonRow'
 
 class TaskForm extends React.Component {
@@ -10,10 +10,8 @@ class TaskForm extends React.Component {
     super(props);
     this.getCurrDateTime = this.getCurrDateTime.bind(this);
     this.readOnly = props.action === "show" ? true : false;
-    this.changeTaskName = this.changeTaskName.bind(this);
-    this.changeDueDate = this.changeDueDate.bind(this);
-    this.changeDueTime = this.changeDueTime.bind(this);
-    this.changeTaskDesc = this.changeTaskDesc.bind(this);
+    this.changeTaskFormField = this.changeTaskFormField.bind(this);
+    this.clearDateTime = this.clearDateTime.bind(this);
     this.changeTag = this.changeTag.bind(this);
     this.appendTag = this.appendTag.bind(this);
     this.editTag = this.editTag.bind(this);
@@ -85,33 +83,25 @@ class TaskForm extends React.Component {
     };
   }
 
-  changeTaskName(e) {
-    this.new_task["task_name"] = e.target.value;
+  changeTaskFormField(e) {
+    this.new_task[e.target.name] = e.target.value;
     this.setState({task: this.new_task});
   }
 
-  changeDueDate(e) {
-    this.new_task["due_date"] = e.target.value;
-    this.setState({task: this.new_task});
-  }
-
-  changeDueTime(e) {
-    this.new_task["due_time"] = e.target.value;
-    this.setState({task: this.new_task});
-  }
-
-  changeTaskDesc(e) {
-    this.new_task["task_desc"] = e.target.value;
+  clearDateTime(e) {
+    this.new_task["due_date"] = "";
+    this.new_task["due_time"] = "";
     this.setState({task: this.new_task});
   }
 
   reset(e) {
     const date_time = this.getCurrDateTime();
-    this.setState({task: {"task_name": "",
-                          "due_date": date_time[0],
-                          "due_time": date_time[1],
-                          "task_desc": "",
-                          "tags": []},
+    this.new_task = {"task_name": "",
+                     "due_date": date_time[0],
+                     "due_time": date_time[1],
+                     "task_desc": "",
+                     "tags": []}
+    this.setState({task: this.new_task,
                   curr_tag: ""});
   }
 
@@ -123,7 +113,6 @@ class TaskForm extends React.Component {
     for (let i = 0; i < this.new_task.tags.length; i++) {
       if (this.new_task.tags[i] === this.state.curr_tag) {
         this.setState({curr_tag: ""});
-        console.log("Repeated tag!");
         return;
       }
     }
@@ -172,17 +161,19 @@ class TaskForm extends React.Component {
     return (
       <Container>
         <Form>
-          <TaskName onChange={this.changeTaskName} task_name={this.state.task["task_name"]} readOnly={this.readOnly} />
+          <TaskName onChange={this.changeTaskFormField} task_name={this.state.task["task_name"]} readOnly={this.readOnly} />
           <Form.Row>
-            <DueDate onChange={this.changeDueDate} due_date={this.state.task["due_date"]} readOnly={this.readOnly} />
-            <DueTime onChange={this.changeDueTime} due_time={this.state.task["due_time"]} readOnly={this.readOnly} />
+            <DueDate onChange={this.changeTaskFormField} due_date={this.state.task["due_date"]} readOnly={this.readOnly} />
+            <DueTime onChange={this.changeTaskFormField} due_time={this.state.task["due_time"]} readOnly={this.readOnly} />
           </Form.Row>
-          <TaskDesc onChange={this.changeTaskDesc} task_desc={this.state.task["task_desc"]} readOnly={this.readOnly}/>
+          <TaskDesc onChange={this.changeTaskFormField} task_desc={this.state.task["task_desc"]} readOnly={this.readOnly}/>
           <Tags onChange={this.changeTag} onClick={this.appendTag} 
-                tags={this.new_task.tags} input_val={this.state.curr_tag} 
+                tags={this.state.task.tags} input_val={this.state.curr_tag} 
                 readOnly={this.readOnly} action={this.props.action} 
                 editTag={this.editTag} deleteTag={this.deleteTag} />
-          <ButtonRow flag={this.props.action} submit={this.submit} edit={this.edit} delete={this.delete} reset={this.reset} />
+          <ButtonRow flag={this.props.action} submit={this.submit} edit={this.edit} 
+                                              delete={this.delete} reset={this.reset}
+                                              clearDateTime={this.clearDateTime} />
         </Form>
       </Container>
     );
