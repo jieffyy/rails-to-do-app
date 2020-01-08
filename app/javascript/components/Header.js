@@ -6,9 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 class Header extends React.Component {
   render () {
     return (
-      <Container className="my-2">
+      <Container className="my-2 pl-0">
         <Navbar variant="dark" bg="dark">
-          <Navbar.Brand href="/tasks">ToDoApp</Navbar.Brand>
+          <Navbar.Brand>ToDoApp</Navbar.Brand>
         </Navbar>
       </Container>
     );

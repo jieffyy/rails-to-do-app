@@ -6,14 +6,15 @@ class UsersController < ApplicationController
   # Loads the main summary page
   def login
     @tasks = {}
+    @tags_xs = Set.new
     if cookies[:user_id]
       @user = User.find(cookies[:user_id])
       @user.tasks.each do |task_obj|
-        @tasks[task_obj.id] = {"tasks" => {}, "tags" => {}}
-        @tasks[task_obj.id]["tasks"] = task_obj.as_json
+        @tasks[task_obj.id] = task_obj.as_json
         tag_xs = []
         task_obj.tags.each do |tag_obj|
           tag_xs.push(tag_obj.tag_name)
+          @tags_xs << tag_obj.tag_name
         end
         @tasks[task_obj.id]["tags"] = tag_xs
       end
@@ -63,6 +64,7 @@ class UsersController < ApplicationController
     cookies.delete(:user_id)
     cookies.delete(:is_admin)
     cookies.delete(:is_guest)
+    flash.notice = "Thank you!"
     redirect_to root_url
   end
 

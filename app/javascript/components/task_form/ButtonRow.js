@@ -7,7 +7,8 @@ function CmdButton(props) {
     return (
       <>
       <Button className="mr-1" variant="dark" onClick={props.submit}>New Task</Button>
-      <Button className="mr-1" variant="secondary" onClick={props.reset}>Reset</Button>
+      <Button className="mr-1" variant="outline-secondary" onClick={props.clearDateTime} >Clear Date and Time</Button>
+      <Button className="mr-1" variant="outline-secondary" onClick={props.reset}>Reset</Button>
       </>
     );
   } else if (props.flag === "edit") {
@@ -15,6 +16,7 @@ function CmdButton(props) {
       <>
       <Button className="mr-1" variant="dark" onClick={props.edit}>Update Task</Button>
       <Button className="mr-1" variant="secondary" onClick={props.delete}>Delete</Button>
+      <Button className="mr-1" variant="secondary" onClick={props.clearDateTime} >Clear Date and Time</Button>
       <Button className="mr-1" variant="secondary" onClick={e => window.location.href = "/"}>Back</Button>
       </>
     );
@@ -37,7 +39,8 @@ class ButtonRow extends React.Component {
                  submit={this.props.submit}
                  reset={this.props.reset}
                  edit={this.props.edit}
-                 delete={this.props.delete}  />
+                 delete={this.props.delete}
+                 clearDateTime={this.props.clearDateTime}  />
       </Col>
       </Row>
     );

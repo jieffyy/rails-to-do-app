@@ -32,11 +32,12 @@ class LoginForm extends React.Component {
   render () {
     return (
       <>
-      <h1>{this.props.user 
+      <h3 style={{whiteSpace:"nowrap", overflowX:"hidden", overflowY: "visible", textOverflow:"ellipsis", height:"2.25rem"}}>
+          {this.props.user 
             ? this.props.user.is_guest 
               ? "Login"
               : "@" + this.props.user.username 
-            : "Login"}</h1>
+            : "Login"}</h3>
       <LoggedIn csrf={this.props.csrf} user={this.props.user} />
       </>
     );
