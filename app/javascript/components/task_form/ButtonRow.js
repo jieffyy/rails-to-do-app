@@ -8,7 +8,7 @@ function CmdButton(props) {
       <>
       <Button className="mr-1" variant="dark" onClick={props.submit}>New Task</Button>
       <Button className="mr-1" variant="outline-secondary" onClick={props.clearDateTime} >Clear Date and Time</Button>
-      <Button className="mr-1" variant="outline-secondary" onClick={props.reset}>Clear</Button>
+      <Button className="mr-1" variant="outline-secondary" onClick={props.reset}>Reset</Button>
       </>
     );
   } else if (props.flag === "edit") {
