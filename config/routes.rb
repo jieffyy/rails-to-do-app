@@ -9,7 +9,8 @@ Rails.application.routes.draw do
   end
   delete '/tasks/:task_id/tags/:tag_name', to: 'tags#destroy'
   
-  resources :users
+  resources :users, only: [:index, :destroy]
+  post 'users/set_admin/:id', to: 'users#set_admin'
   
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

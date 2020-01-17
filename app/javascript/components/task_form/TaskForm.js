@@ -23,7 +23,7 @@ class TaskForm extends React.Component {
     if (props.task) {
       this.new_task = {"task_name": props.task.task_name,
                        "due_date": props.task.due_date,
-                       "due_time": props.task.due_time.slice(11, 16),
+                       "due_time": props.task.due_time ? props.task.due_time.slice(11, 16) : null,
                        "task_desc": props.task.task_desc,
                        "tags": props.task.tags
                       }
@@ -149,7 +149,7 @@ class TaskForm extends React.Component {
   getCurrDateTime() {
     var date_obj = new Date();
     var date_str = date_obj.toLocaleDateString(undefined, {year: 'numeric', month: '2-digit', day: '2-digit'});
-    const date = date_str.slice(6, 10) + "-" + date_str.slice(3, 5) + "-" + date_str.slice(0, 2);
+    const date = date_str.slice(6, 10) + "-" + date_str.slice(0, 2) + "-" + date_str.slice(3, 5);
     var time_str = date_obj.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit', second: '2-digit'});
     const time = time_str.slice(-1, -3) === "AM" 
                 ? time_str.slice(0, 5)

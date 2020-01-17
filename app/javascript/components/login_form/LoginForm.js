@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {Form, Button} from "react-bootstrap"
+import {Form, Button, Row, Col} from "react-bootstrap"
 
 
 function LoggedIn(props) {
@@ -8,6 +8,12 @@ function LoggedIn(props) {
     if (props.user.is_guest) {
       return (
         <LoggedIn csrf={props.csrf} />
+      );
+    } else if (props.user.is_admin) {
+      return (
+        <>
+        <a href="/users">Manage Users</a> | <a href="/logout">Logout</a>
+        </>
       );
     } else {
       return (
@@ -17,9 +23,13 @@ function LoggedIn(props) {
   } else {
     return (
     <Form method="POST" action="/login">
-      <Form.Group>
-      <Form.Label>Username:</Form.Label>
-      <Form.Control type="text" placeholder="Enter username" name="username" />
+      <Form.Group as={Row}>
+        <Form.Label column sm="4">Username:</Form.Label>
+        <Col><Form.Control type="text" placeholder="Enter username" name="username" /></Col>
+      </Form.Group>
+      <Form.Group as={Row}>
+        <Form.Label column sm="4">Password:</Form.Label>
+        <Col><Form.Control type="password" placeholder="Password" name="password" /></Col>
       </Form.Group>
       <input type="hidden" name="authenticity_token" value={props.csrf}></input>
       <Button variant="dark" type="submit">Login</Button>
