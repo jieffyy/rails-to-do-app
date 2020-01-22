@@ -1,16 +1,16 @@
 Rails.application.routes.draw do
-  root 'users#login'
+  root 'welcome#index'
 
   post 'login', to: 'users#create_session'
   get 'logout', to: 'users#delete_session'
 
-  resources :tasks, except: [:index, :new] do
-    resource :tags, only: [:create]
-  end
-  delete '/tasks/:task_id/tags/:tag_name', to: 'tags#destroy'
-  
   resources :users, only: [:index, :destroy]
   post 'users/set_admin/:id', to: 'users#set_admin'
+
+  namespace :api do
+    jsonapi_resources :tasks
+  end
   
+  get "*path", to: "welcome#index", constraints: { format: "html" }
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
