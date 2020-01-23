@@ -25,6 +25,8 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'jsonapi-resources'
 # Setup JWT for authentication
 gem 'jwt'
+# Use foreman to run the server
+gem 'foreman'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

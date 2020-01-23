@@ -1,0 +1,12 @@
+//general
+export const SELECT_SUBAPP = "SELECT_APP"
+export const SET_NOTICE = "SET_NOTICE"
+
+//users
+export const LOGIN_ACTION = "LOGIN"
+export const LOGIN_ACTION_SUCCESS = "LOGIN_SUCCESS"
+export const LOGIN_ACTION_FAILED = "LOGIN_FAILED"
+
+export const REGISTER_ACTION = "REGISTER"
+export const REGISTER_ACTION_SUCCESS = "REGISTER_SUCESS"
+export const REGISTER_ACTION_FAILED = "REGISTER_FAILED"

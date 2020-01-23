@@ -1,0 +1,19 @@
+import { createStore, compose, applyMiddleware } from 'redux'
+import { rootReducer } from './reducers/index'
+import thunk from 'redux-thunk'
+
+import { AppState } from './types'
+
+export const initalState: AppState = {
+  notice: "Hello",
+  user: null,
+  sub_app: 'all',
+  csrf: (document.querySelector("meta[name=csrf-token]") as HTMLMetaElement).content
+}
+
+const composedEnhancers = compose(
+  applyMiddleware(thunk), 
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+)
+
+export const store = createStore(rootReducer, initalState, composedEnhancers);

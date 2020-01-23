@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   post 'login', to: 'users#create_session'
   get 'logout', to: 'users#delete_session'
 
-  resources :users, only: [:index, :destroy]
+  resources :users, only: [:index, :destroy, :create]
   post 'users/set_admin/:id', to: 'users#set_admin'
 
   namespace :api do
