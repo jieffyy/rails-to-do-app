@@ -8,7 +8,9 @@ export const initalState: AppState = {
   notice: "Hello",
   user: null,
   sub_app: 'all',
-  csrf: (document.querySelector("meta[name=csrf-token]") as HTMLMetaElement).content
+  csrf: (document.querySelector("meta[name=csrf-token]") as HTMLMetaElement).content,
+  task: null,
+  task_xs: []
 }
 
 const composedEnhancers = compose(

@@ -27,6 +27,7 @@ class UsersController < ApplicationController
     if user && user.authenticate(params[:password])
       rv["username"] = user.username
       rv["is_admin"] = user.is_admin
+      auth_user(user.id)
     elsif user
       rv['message'] = "Password is incorrect"
     else
@@ -37,5 +38,6 @@ class UsersController < ApplicationController
   end
   
   def delete_session
+    delete_user
   end
 end
