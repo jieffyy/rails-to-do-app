@@ -7,9 +7,7 @@ Rails.application.routes.draw do
   resources :users, only: [:index, :destroy, :create]
   post 'users/set_admin/:id', to: 'users#set_admin'
 
-  namespace :api do
-    jsonapi_resources :tasks
-  end
+  resources :tasks, only: [:index, :create]
   
   get "*path", to: "welcome#index", constraints: { format: "html" }
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

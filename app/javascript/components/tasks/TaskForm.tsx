@@ -12,18 +12,25 @@ function dateToday(): string {
   return date;
 }
 
+const mapStateToProps = (state: AppState) => {
+  return {
+    csrf: state.csrf
+  }
+}
+
 const mapDispatchToProps = {
   addTask
 }
 
-const connector = connect(null, mapDispatchToProps)
+const connector = connect(mapStateToProps, mapDispatchToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 class TaskFormComp extends Component<PropsFromRedux, AppState> {
   render() {
     return (
       <Formik
-        initialValues={{task_name: "", task_desc: "", due_date: dateToday(), due_time: "23:00", csrf: ""}}
+        initialValues={{task_name: "", task_desc: "", due_date: dateToday(), due_time: "23:00",
+          authenticity_token: this.props.csrf}}
         onSubmit={values => this.props.addTask(values)}
       >
 
@@ -55,7 +62,7 @@ class TaskFormComp extends Component<PropsFromRedux, AppState> {
             </div>
 
             <div className="col sm-4 d-flex align-items-end">
-            <button className="btn btn-outline-secondary"
+            <button type="button" className="btn btn-outline-secondary"
                     onClick={() => {
                               formik.setFieldValue("due_date", "");
                               formik.setFieldValue("due_time", "");

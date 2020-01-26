@@ -1,4 +1,4 @@
-import { setNotice } from "../actions"
+import { setNotice, fetchAPI } from "../actions"
 
 import { User, loginActionSuccess } from "../types/users"
 import { LOGIN_ACTION_SUCCESS } from "../types/constants"
@@ -9,8 +9,6 @@ import { AppActions } from "../types"
 // success -> update state
 // failed -> setNotice
 export function loginAction(data: {username: string, password: string}) {
-  console.log("Hello from loginAction!");
-  console.log(data);
   const fetch_options: RequestInit = {
     method: "POST",
     headers: {
@@ -26,7 +24,8 @@ export function loginAction(data: {username: string, password: string}) {
       dispatch(setNotice(data.error))
     }
     else {
-      dispatch(loginActionSuccess(data))
+      dispatch(fetchAPI());
+      dispatch(loginActionSuccess(data));
     }
   }
 }
@@ -41,7 +40,6 @@ function loginActionSuccess(payload: User): loginActionSuccess {
 // exposed to component
 // success/failed -> setNotice
 export function registerUser(data: {username: string, password: string, cfm_password: string}) {
-  console.log("Hello from registerUser!");
   const fetch_options: RequestInit = {
     method: "POST",
     headers: {

@@ -1,4 +1,6 @@
 //general
+export const FETCH_API = "FETCH_API"
+export const FETCH_API_SUCCESS = "FETCH_API_SUCCESS"
 export const SELECT_SUBAPP = "SELECT_APP"
 export const SET_NOTICE = "SET_NOTICE"
 

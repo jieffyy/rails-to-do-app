@@ -8,8 +8,17 @@ class UsersController < ApplicationController
 
     if user
       message["message"] = "Username has been taken."
+    elsif get_user()
+      user = User.find(get_user())
+      if user.update(username: params[:username], password: params[:password], password_confirmation: params[:cfm_password],
+                      is_admin: false, is_guest: false)
+        message['message'] = "User added! Your tasks have been added. Please login."
+      else
+        message['message'] = "Something unexpected happened"
+      end
     else
-      user = User.new(username: params[:username], password: params[:password], password_confirmation: params[:cfm_password])
+      user = User.new(username: params[:username], password: params[:password], password_confirmation: params[:cfm_password],
+                      is_admin: false, is_guest: false)
       if user.save
         message["message"] = "User added! Please login."
       else
@@ -27,11 +36,21 @@ class UsersController < ApplicationController
     if user && user.authenticate(params[:password])
       rv["username"] = user.username
       rv["is_admin"] = user.is_admin
-      auth_user(user.id)
+      
+      if get_user()
+        guest_acc = User.find(get_user())
+        guest_acc.tasks.each do |t|
+          t.user_id = guest_acc.id
+        end
+        guest_acc.destroy
+      end
+      
+      cookies['user_id'] = user.id
     elsif user
-      rv['message'] = "Password is incorrect"
+      puts "incorrect password"
+      rv['error'] = "Password is incorrect"
     else
-      rv['message'] = "Username not found"
+      rv['error'] = "Username not found"
     end
 
     render json: rv
@@ -39,5 +58,7 @@ class UsersController < ApplicationController
   
   def delete_session
     delete_user
+
+    redirect_to root_url
   end
 end

@@ -6,7 +6,7 @@ import { setSubApp } from '../../store/actions'
 
 import SearchPage from './SearchPage'
 import TaskForm from './TaskForm'
-import TaskIndex from './TaskIndex'
+import ToDoList from './ToDoList'
 
 const mapStateToProps = (state: AppState) => {
   return {
@@ -26,7 +26,7 @@ class TasksComp extends Component<PropsFromRedux, AppState> {
     return (
       <>
         <h3>To Do List</h3>
-        <div className="btn-group" role="group" aria-label="Basic example">
+        <div className="btn-group" role="group">
           <button type="button" className="btn btn-outline-secondary"
             onClick={() => this.props.setSubApp('add')}>Add Task</button>
           <button type="button" className="btn btn-outline-secondary"
@@ -39,7 +39,7 @@ class TasksComp extends Component<PropsFromRedux, AppState> {
           ? <TaskForm />
           : this.props.sub_app === "search"
             ? <SearchPage />
-            : <TaskIndex />}
+            : <ToDoList />}
       </>
     );
   }

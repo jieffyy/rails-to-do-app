@@ -17,11 +17,12 @@ export function addTask (data: Omit<Task, "id" | "is_complete">) {
   }
 
   return async (dispatch: ThunkDispatch<{}, {}, AppActions>) => {
-    const response = await fetch("", fetch_options);
+    const response = await fetch("/tasks/", fetch_options);
     const data = await response.json();
     if (data.error) {
       dispatch(setNotice(data.error))
     } else {
+      console.log(data)
       dispatch(addTaskSuccess(data))
     }
   }
