@@ -5,10 +5,11 @@ import { SET_NOTICE, SELECT_SUBAPP, FETCH_API_SUCCESS } from './constants'
 export type AppState = {
   notice: string,
   user: User | null,
-  sub_app: 'all' | 'add' | 'search',
+  sub_app: 'all' | 'add' | 'search' | 'task_edit' | 'task_show',
   csrf: string,
   task: null | Task
-  task_xs: Task[]
+  task_xs: Task[],
+  ref_xs: Task[]
 }
 
 export type fetchAPISuccess = {
@@ -24,7 +25,7 @@ export type setNotice = {
 
 export type selectSubApp = {
   type: typeof SELECT_SUBAPP,
-  sub_app: 'all' | 'add' | 'search'
+  sub_app: 'all' | 'add' | 'search' | 'task_edit' | 'task_show'
 }
 
 export type AppActions = AllUserActions | AllTaskActions | fetchAPISuccess | setNotice | selectSubApp

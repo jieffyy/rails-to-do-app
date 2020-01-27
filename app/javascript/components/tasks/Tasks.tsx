@@ -4,8 +4,8 @@ import { connect, ConnectedProps } from 'react-redux'
 import { AppState } from '../../store/types'
 import { setSubApp } from '../../store/actions'
 
-import SearchPage from './SearchPage'
-import TaskForm from './TaskForm'
+import SearchPage from './search/SearchPage'
+import BaseForm from './BaseForm'
 import ToDoList from './ToDoList'
 
 const mapStateToProps = (state: AppState) => {
@@ -36,7 +36,7 @@ class TasksComp extends Component<PropsFromRedux, AppState> {
         </div>
 
         {this.props.sub_app === "add"
-          ? <TaskForm />
+          ? <BaseForm />
           : this.props.sub_app === "search"
             ? <SearchPage />
             : <ToDoList />}

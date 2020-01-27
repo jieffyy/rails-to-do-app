@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import { connect, ConnectedProps } from 'react-redux'
+import { Dropdown } from 'react-bootstrap'
 
 import { AppState } from '../../store/types'
-import { deleteTask } from '../../store/actions/tasks'
+import { toggleComplete, deleteTask } from '../../store/actions/tasks'
 
 const mapStateToProps = (state: AppState) => {
   return {
+    csrf: state.csrf,
     tasks: state.task_xs
   }
 }
 
 const mapDispatchToProps = {
+  toggleComplete,
   deleteTask
 }
 
@@ -24,22 +27,27 @@ class ToDoListComp extends Component<PropsFromRedux> {
     if (this.props.tasks.length > 0) {
       return (
         this.props.tasks.map(task => (
-          <div className="row my-2" key={task.id}>
-            <div className="col col-4">
-              <div className="btn-group" role="group">
-                <button className="btn btn-outline-secondary">Show</button>
-                <button className="btn btn-outline-secondary">Edit</button>
-                <button className="btn btn-outline-secondary">Delete</button>
-              </div>
+          <div className="row my-3" key={task.id}>
+            <div className="col col-1 d-flex align-items-end">
+              <Dropdown>
+                <Dropdown.Toggle id="dropdown" variant="outline-secondary" />
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={() => window.location.href="/tasks/" + task.id}>Edit</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.props.deleteTask(this.props.csrf, task.id)}>Delete</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
 
-            <div className="col col-8">
+            <div className="col col-11">
               <div className="row">
                 <div className="col">{task.task_name}</div>
               </div>
               <div className="row">
                 <div className="col col-2">
-                  <button className="btn btn-secondary">{task.is_complete ? "Done" : "Pending"}</button>
+                  <button className={task.is_complete ? "btn btn-success" : "btn btn-secondary"} type="button"
+                    onClick={() => this.props.toggleComplete(this.props.csrf, task.id)}
+                  >{task.is_complete ? "Done" : "Pending"}</button>
                 </div>
                 <div className="col">
                   <div>Some tags go here</div>
