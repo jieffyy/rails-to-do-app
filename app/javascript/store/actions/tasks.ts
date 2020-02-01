@@ -8,7 +8,6 @@ import TaskForm from '../../components/tasks/TaskForm';
 
 // exposed to component
 export function addTask (csrf: string, data: Omit<Task, "id" | "is_complete">) {
-  console.log("Hello from addTask!");
   const fetch_options: RequestInit = {
     method: "POST",
     headers: {

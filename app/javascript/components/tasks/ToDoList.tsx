@@ -50,7 +50,12 @@ class ToDoListComp extends Component<PropsFromRedux> {
                   >{task.is_complete ? "Done" : "Pending"}</button>
                 </div>
                 <div className="col">
-                  <div>Some tags go here</div>
+                  <div>{task.tags.map(tag_name => {
+                    return (
+                      <span key={tag_name} className="badge badge-info mr-1">{tag_name}</span>
+                    );
+                  }
+                  )}</div>
                 </div>
               </div>
             </div>

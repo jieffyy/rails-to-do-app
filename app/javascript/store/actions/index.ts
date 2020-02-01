@@ -21,7 +21,6 @@ export function setSubApp(sub_app: 'all' | 'add' | 'search'): selectSubApp {
 }
 
 export function fetchAPI() {
-  console.log("entered function for fetch API")
   const fetch_options: RequestInit = {
     method: "GET",
     headers: {
@@ -30,11 +29,10 @@ export function fetchAPI() {
   }
 
   return async (dispatch: ThunkDispatch<{}, {}, AppActions>) => {
-    console.log("front of fetch")
     fetch("/tasks/", fetch_options)
       .then(response => response.json())
       .then(data => {
-        console.log("fetching API!")
+  
         const user = data.user ? data.user : null
         const task_xs = data.tasks ? data.tasks : [];
         dispatch(fetchAPISuccess(user, task_xs))

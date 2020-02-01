@@ -11,9 +11,13 @@ class TasksController < ApplicationController
       if !found_user.is_guest
         user['username'] = found_user.username
         user['is_admin'] = found_user.is_admin
-        @tasks = found_user.tasks
+        
+        task_list = []
+        found_user.tasks.each do |tr|
+          task_list << simplify_task(tr)
+        end
 
-        render json: {user: user, tasks: @tasks}
+        render json: {user: user, tasks: task_list}
         return
       end
     end
@@ -21,11 +25,8 @@ class TasksController < ApplicationController
 
   def show
     task = Task.find(params[:id])
-    task_rv = task.as_json
-    task_rv.delete("created_at")
-    task_rv.delete("updated_at")
-    task_rv.delete("user_id")
-    render json: task_rv
+  
+    render json: simplify_task(task)
   end
 
   def create
@@ -42,25 +43,35 @@ class TasksController < ApplicationController
     task = Task.create(task_name: params[:task_name], task_desc: params[:task_desc], 
         due_date: params[:due_date], due_time: params[:due_time], is_complete: false, user_id: user.id)
     if task.save
-      rv = task.as_json
-      rv.delete('created_at')
-      rv.delete('updated_at')
+      params[:tags].each do |tag_name|
+        t = Tag.find_or_create_by(tag_name: tag_name)
+        task.tags << t
+      end
+      rv = simplify_task(task)
     else
       rv['error'] = "Error in saving the task"
     end
 
+  
     render json: rv
   end
 
   def update
     @task = Task.find(params[:id])
-    if !@task.update(params.require(:task).permit(:task_name, :task_desc,
-            :due_date, :due_time, :is_complete))
-      render json: {error: "Couldn't update task."}
-      return
-    else
+    
+    if @task.update(params.require(:task).permit(:task_name, :task_desc,
+      :due_date, :due_time, :is_complete))
+
+      params[:tags].each do |tag_name|
+        tag = Tag.find_or_create_by(tag_name: tag_name)
+        @task.tags.push(tag) unless @task.tags.include?(tag)
+      end
+
       render json: {id: @task.id}
+    else
+      render json: {error: "Couldn't update task."}
     end
+
   end
 
   def destroy
@@ -82,5 +93,16 @@ class TasksController < ApplicationController
       return
     end
   end
+
+  private
+
+    def simplify_task(task_record)
+      task = task_record.as_json
+      task.delete("user_id")
+      task.delete("created_at")
+      task.delete("updated_at")
+      task["tags"] = task_record.tags.map{ |t| t.tag_name }
+      return task
+    end
 
 end

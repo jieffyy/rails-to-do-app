@@ -7,7 +7,8 @@ export interface Task {
   task_desc?: string,
   due_date?: string,
   due_time?: string
-  is_complete: boolean
+  is_complete: boolean,
+  tags: string[]
 }
 
 // to update state

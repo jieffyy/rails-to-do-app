@@ -24,9 +24,9 @@ class UsersComp extends Component<PropsFromRedux, AppState> {
       return (
         <>
           {this.props.notice !== "" ? notice : null}
-          <h3>Welcome</h3>
+          <h3>@{this.props.user.username}</h3>
           {this.props.user.is_admin ? <><a>Manage Users</a> |</> : null}
-          <a>Logout</a>
+          <a href="/logout">Logout</a>
         </>
       );
     } else {
