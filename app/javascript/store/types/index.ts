@@ -1,6 +1,6 @@
 import { User, AllUserActions } from './users'
 import { Task, AllTaskActions } from './tasks'
-import { SET_NOTICE, SELECT_SUBAPP, FETCH_API_SUCCESS } from './constants'
+import { SET_NOTICE, SELECT_SUBAPP, FETCH_API_SUCCESS, START_SEARCH, EXIT_SEARCH } from './constants'
 
 export type AppState = {
   notice: string,
@@ -28,4 +28,12 @@ export type selectSubApp = {
   sub_app: 'all' | 'add' | 'search' | 'task_edit' | 'task_show'
 }
 
-export type AppActions = AllUserActions | AllTaskActions | fetchAPISuccess | setNotice | selectSubApp
+export type startSearch = {
+  type: typeof START_SEARCH,
+}
+
+export type exitSearch = {
+  type: typeof EXIT_SEARCH
+}
+
+export type AppActions = AllUserActions | AllTaskActions | fetchAPISuccess | setNotice | selectSubApp | startSearch | exitSearch

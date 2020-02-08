@@ -146,9 +146,12 @@ class BaseFormComp extends Component<PropsFromRedux, State> {
                     <button type="button" className="btn btn-outline-secondary"
                     placeholder="New Tag" onClick={() => {
                       const tag = this.state.curr_tag
-                      formik.setFieldValue("tags", formik.values.tags.concat([tag]))
+                      
+                      if (!formik.values.tags.includes(tag)) {
+                        formik.setFieldValue("tags", formik.values.tags.concat([tag]))
+                      }
+                    
                       this.setState({curr_tag: ""});
-                      console.log("Formik Values: " + formik.values.tags)
                     }}>New Tag</button>
                   </div>
                 </div>

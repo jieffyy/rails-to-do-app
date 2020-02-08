@@ -3,6 +3,8 @@ export const FETCH_API = "FETCH_API"
 export const FETCH_API_SUCCESS = "FETCH_API_SUCCESS"
 export const SELECT_SUBAPP = "SELECT_APP"
 export const SET_NOTICE = "SET_NOTICE"
+export const START_SEARCH = "START_SEARCH"
+export const EXIT_SEARCH = "EXIT_SEARCH"
 
 //users
 export const LOGIN_ACTION = "LOGIN"

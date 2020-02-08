@@ -149,7 +149,7 @@ function setTaskSuccess(payload: Task): setTask {
 }
 
 // exposed to component
-export function handleSearch(payload: string): handleSearch {
+export function handleSearch(payload: {search_name: string, search_tag: string}): handleSearch {
   return {
     type: HANDLE_SEARCH,
     payload

@@ -1,7 +1,7 @@
 import { ThunkDispatch } from 'redux-thunk'
 
-import { SET_NOTICE, SELECT_SUBAPP, FETCH_API_SUCCESS } from "../types/constants";
-import { setNotice, selectSubApp, fetchAPISuccess, AppActions } from "../types";
+import { SET_NOTICE, SELECT_SUBAPP, FETCH_API_SUCCESS, START_SEARCH, EXIT_SEARCH } from "../types/constants";
+import { setNotice, selectSubApp, fetchAPISuccess, AppActions, startSearch, exitSearch } from "../types";
 import { User } from "../types/users";
 import { Task } from "../types/tasks";
 
@@ -17,6 +17,18 @@ export function setSubApp(sub_app: 'all' | 'add' | 'search'): selectSubApp {
   return {
     type: SELECT_SUBAPP,
     sub_app
+  }
+}
+
+export function startSearch(): startSearch {
+  return {
+    type: START_SEARCH
+  }
+}
+
+export function exitSearch(): exitSearch {
+  return {
+    type: EXIT_SEARCH
   }
 }
 

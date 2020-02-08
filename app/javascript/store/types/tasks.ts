@@ -41,7 +41,7 @@ export type setTask = {
 
 export type handleSearch = {
   type: typeof HANDLE_SEARCH,
-  payload: string
+  payload: {search_name: string, search_tag: string}
 }
 
 // for types/index
