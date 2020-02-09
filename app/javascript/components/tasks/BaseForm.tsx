@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect, ConnectedProps } from 'react-redux'
-import { Formik, FieldArray, Field } from 'formik'
+import { Formik, ErrorMessage } from 'formik'
+import * as Yup from 'yup'
 
 import { addTask, editTask } from '../../store/actions/tasks'
 import { AppState } from '../../store/types';
@@ -59,9 +60,14 @@ class BaseFormComp extends Component<PropsFromRedux, State> {
   }
 
   render() {
+    const TaskFormSchema = Yup.object().shape({
+      task_name: Yup.string().required("Task name cannot be empty")
+    })
+
     return (
       <Formik
         enableReinitialize
+        validationSchema={TaskFormSchema}
         initialValues={this.state.task
           ? {task_name: this.state.task.task_name,
             task_desc: this.state.task.task_desc,
@@ -83,6 +89,11 @@ class BaseFormComp extends Component<PropsFromRedux, State> {
       { formik => (
         <div className="container pt-3">
         <form onSubmit={formik.handleSubmit}>
+            <div className="form-group">
+                <ErrorMessage name="task_name">
+                  {msg => <div className="alert alert-warning">{msg}</div>}
+                </ErrorMessage>
+              </div>
       
           <div className="form-group">
             <div className="form-group">Task Name</div>

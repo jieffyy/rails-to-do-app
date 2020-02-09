@@ -40,8 +40,10 @@ class UsersController < ApplicationController
       if get_user()
         guest_acc = User.find(get_user())
         guest_acc.tasks.each do |t|
-          t.user_id = guest_acc.id
+          user.tasks << t
         end
+        user.save
+        guest_acc.reload
         guest_acc.destroy
       end
       
@@ -60,5 +62,6 @@ class UsersController < ApplicationController
     delete_user
 
     redirect_to root_url
+    return
   end
 end

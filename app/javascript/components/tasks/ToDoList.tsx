@@ -51,7 +51,7 @@ class ToDoListComp extends Component<PropsFromRedux> {
 
             <div className="col col-11">
               <div className="row">
-                <div className="col">{task.task_name}</div>
+                <div className="col overflow-hidden">{task.task_name}</div>
               </div>
               <div className="row">
                 <div className="col col-2">

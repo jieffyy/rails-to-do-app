@@ -5,7 +5,7 @@ import thunk from 'redux-thunk'
 import { AppState } from './types'
 
 export const initalState: AppState = {
-  notice: "Hello",
+  notice: "",
   user: null,
   sub_app: 'all',
   csrf: (document.querySelector("meta[name=csrf-token]") as HTMLMetaElement).content,

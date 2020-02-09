@@ -21,6 +21,8 @@ class TasksController < ApplicationController
         return
       end
     end
+
+    render json: {}
   end
 
   def show

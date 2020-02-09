@@ -1,31 +1,17 @@
 # CVWO 2019/2020: React on Rails - ToDoApp
 
-## Details
+## Submission Details
 
 Name: Low Jie Feng\
 Matriculation Number: A0201747J
 
-## ToDoApp Details
+<p>Files for submission can be found under the submission folder
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Ruby and Rails Version
 
-Things you may want to cover:
+Ruby: 2.6.5\
+Rails: 6.0.2.1
 
-* Ruby version
+## Database
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+This site uses Postgresql.

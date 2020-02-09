@@ -24,8 +24,7 @@ class UsersComp extends Component<PropsFromRedux, AppState> {
       return (
         <>
           {this.props.notice !== "" ? notice : null}
-          <h3>@{this.props.user.username}</h3>
-          {this.props.user.is_admin ? <><a>Manage Users</a> |</> : null}
+          <h3 className="overflow-hidden">@{this.props.user.username}</h3>
           <a href="/logout">Logout</a>
         </>
       );
