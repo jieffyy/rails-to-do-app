@@ -14,9 +14,14 @@ export const initalState: AppState = {
   ref_xs: []
 }
 
+export const store = createStore(rootReducer, initalState, applyMiddleware(thunk))
+
+/*
 const composedEnhancers = compose(
   applyMiddleware(thunk), 
   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 )
 
 export const store = createStore(rootReducer, initalState, composedEnhancers);
+*/
+

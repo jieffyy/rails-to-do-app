@@ -5,7 +5,11 @@
 Name: Low Jie Feng\
 Matriculation Number: A0201747J
 
-<p>Files for submission can be found under the submission folder
+<p>Files for submission can be found under the submission folder, as ToDoApp - Final Submission
+
+## Site
+
+[This app is hosted on Heroku.](https://hidden-basin-76857.herokuapp.com/)
 
 ## Ruby and Rails Version
 
@@ -14,4 +18,4 @@ Rails: 6.0.2.1
 
 ## Database
 
-This site uses Postgresql.
+This app uses Postgresql.
