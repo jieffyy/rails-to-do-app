@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:13.1-alpine
+    restart: always
+    ports:
+      - 5003:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+
+  pgadmin:
+    image: dpage/pgadmin4:4.29
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@user.com
+      PGADMIN_DEFAULT_PASSWORD: pass
+    ports:
+      - "5002:80"
+    links:
+      - "db:db"
+    depends_on:
+      - db
