@@ -1,21 +1,31 @@
-# CVWO 2019/2020: React on Rails - ToDoApp
+# Rails Task Management Application
 
-## Submission Details
+## Setup
 
-Name: Low Jie Feng\
-Matriculation Number: A0201747J
+_Written as of 26 Jan 2021, developed on Windows with WSL2_
 
-<p>Files for submission can be found under the submission folder, as ToDoApp - Final Submission
+### Current Development Version
 
-## Site
+Ruby: 3.0.0
+Rails: 6.1.1
 
-[This app is hosted on Heroku.](https://hidden-basin-76857.herokuapp.com/)
+### Setup
 
-## Ruby and Rails Version
+#### Ruby
 
-Ruby: 2.6.5\
-Rails: 6.0.2.1
+1. Setup rbenv using this [link](https://github.com/rbenv/rbenv#installation).
+1. Ensure that rbenv has the Ruby version as stated in `.ruby-version`.
+1. Set the local Ruby version using `rbenv local <version>`.
 
-## Database
+#### Rails and Ruby Gems
 
-This app uses Postgresql.
+1. Run 'gem install rails -v 6.1.1`.
+1. Enter the `server/` directory by running by `cd server/`.
+1. Run `bundle install`.
+
+#### Docker - for the Database
+
+1. Ensure you have [Docker Compose](https://www.docker.com/products/docker-desktop) on your computer.
+   > Docker for Windows might get tricky to setup.
+   > You will need WSL2 (which means you need a preview version of Windows).
+1. Run `docker-compose -f development.yml up`.
