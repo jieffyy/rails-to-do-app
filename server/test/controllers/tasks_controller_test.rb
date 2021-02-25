@@ -2,7 +2,7 @@ require "test_helper"
 
 class TasksControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @task = tasks(:one)
+    @task = tasks(:task_1)
   end
 
   test "should get index" do
@@ -12,7 +12,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
 
   test "should create task" do
     assert_difference('Task.count') do
-      post tasks_url, params: { task: { isDone: @task.isDone, name: @task.name } }, as: :json
+      post tasks_url, params: { task: { is_done: @task.is_done, name: @task.name } }, as: :json
     end
 
     assert_response 201
@@ -24,7 +24,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update task" do
-    patch task_url(@task), params: { task: { isDone: @task.isDone, name: @task.name } }, as: :json
+    patch task_url(@task), params: { task: { is_done: @task.is_done, name: @task.name } }, as: :json
     assert_response 200
   end
 
