@@ -1,0 +1,8 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+task_1:
+  name: My First Task!
+  is_done: false
+
+task_2:
+  name: Hello World!
