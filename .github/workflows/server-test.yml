@@ -34,8 +34,6 @@ jobs:
           ruby-version: 3.0
   
       - name: Build and test
-        env:
-          RAILS_ENV: test
         run: |
           sudo apt-get -yqq install libpq-dev
           cd server
