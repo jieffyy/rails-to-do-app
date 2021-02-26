@@ -3,19 +3,24 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index
-    @tasks = Task.all
+    @tasks = Task.where(user_id: @user.id)
 
     render json: @tasks
   end
 
   # GET /tasks/1
   def show
-    render json: @task
+    if @task
+      render json: @task
+    else
+      render json: {}, status: :not_found
+    end
   end
 
   # POST /tasks
   def create
     @task = Task.new(task_params)
+    @task.user_id = @user.id
 
     if @task.save
       render json: @task, status: :created, location: @task
@@ -26,22 +31,26 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   def update
-    if @task.update(task_params)
+    if @task && @task.update(task_params)
       render json: @task
     else
-      render json: @task.errors, status: :unprocessable_entity
+      render json: {} , status: :not_found
     end
   end
 
   # DELETE /tasks/1
   def destroy
-    @task.destroy
+    if @task
+      @task.destroy
+    else
+      render json: {}, status: :not_found
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
-      @task = Task.find(params[:id])
+      @task = Task.where({ user_id: @user.id, id: params[:id] }).take
     end
 
     # Only allow a list of trusted parameters through.
