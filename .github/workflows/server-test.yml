@@ -15,6 +15,9 @@ jobs:
       db:
         image: postgres:13
         ports: ['5003:5432']
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pass
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -32,8 +35,8 @@ jobs:
   
       - name: Build and test
         env:
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: pass
+          PGHOST: localhost
+          PGUSER: user
           RAILS_ENV: test
         run: |
           sudo apt-get -yqq install libpq-dev
