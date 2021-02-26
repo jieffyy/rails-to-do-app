@@ -10,4 +10,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def login(username, password)
+    post login_url, params: { username: username, password: password }, as: :json
+    token = "Bearer: " + JSON.parse(response.body)["token"]
+  end
 end

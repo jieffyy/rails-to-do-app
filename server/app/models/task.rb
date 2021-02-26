@@ -12,4 +12,6 @@ class Task < ApplicationRecord
     include ActiveModel::Validations
     validates :name, presence: true
     validates_with DoneAtDateTime
+
+    belongs_to :user
 end
