@@ -15,9 +15,6 @@ jobs:
       db:
         image: postgres:13
         ports: ['5003:5432']
-        env:
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: pass
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -34,9 +31,14 @@ jobs:
           ruby-version: 3.0
   
       - name: Build and test
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pass
+          RAILS_ENV: test
         run: |
           sudo apt-get -yqq install libpq-dev
           cd server
+          ls
           gem install bundler
           bundle install --jobs 4 --retry 3
           bundle exec rails db:create
