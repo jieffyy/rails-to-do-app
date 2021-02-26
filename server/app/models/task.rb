@@ -12,9 +12,4 @@ class Task < ApplicationRecord
     include ActiveModel::Validations
     validates :name, presence: true
     validates_with DoneAtDateTime
-
-    def done_at_is_correct?
-        # puts is_done && done_at
-        is_done && done_at
-    end
 end
