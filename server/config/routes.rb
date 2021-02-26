@@ -3,5 +3,5 @@ Rails.application.routes.draw do
   resources :tasks
   
   resources :users, only: [:create]
-  post "/login", to: "users#login"
+  post "/login", to: "users#login", as: :login
 end
