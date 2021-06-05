@@ -14,7 +14,7 @@ jobs:
     services:
       db:
         image: postgres:13
-        ports: ['5003:5432']
+        ports: ["5003:5432"]
         env:
           POSTGRES_USER: user
           POSTGRES_PASSWORD: pass
@@ -23,16 +23,14 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.0
-  
+
       - name: Build and test
         env:
           PGHOST: localhost
