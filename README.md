@@ -1,6 +1,6 @@
 # Rails Task Management Application
 
-![Server - Tests](https://github.com/lowjiefeng1998/rails-to-do-app/actions/workflows/main.yml/badge.svg)
+![Server Tests](https://github.com/lowjiefeng1998/rails-to-do-app/actions/workflows/server-test.yml/badge.svg)
 
 ## Setup
 
