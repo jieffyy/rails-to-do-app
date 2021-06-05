@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+user_1_tag_one:
+  name: High Priority
+  user: user_1
+
+user_1_tag_two:
+  name: Low Priority
+  user: user_1
