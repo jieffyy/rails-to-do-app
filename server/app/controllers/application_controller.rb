@@ -39,6 +39,10 @@ class ApplicationController < ActionController::API
 
   private
     def secret_key
-      Rails.application.credentials.secret_key
+      if ENV['RAILS_ENV'] == "test"
+        "test-env-password"
+      else
+        Rails.application.credentials.secret_key
+      end
     end
 end
