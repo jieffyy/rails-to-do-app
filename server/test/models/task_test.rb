@@ -35,4 +35,18 @@ class TaskTest < ActiveSupport::TestCase
     assert @task.invalid?
   end
 
+  test "valid task with user's tags" do
+    @task = Task.new(name: "Hello!", is_done: false)
+    @task.user = @user
+    @task.tags = @user.tags
+    assert @task.valid?
+  end
+
+  test "invalid task with another user's tags" do
+    @task = Task.new(name: "Hello!", is_done: false)
+    @task.user = @user
+    @task.tags = users(:user_2).tags
+    assert @task.invalid?
+  end
+
 end

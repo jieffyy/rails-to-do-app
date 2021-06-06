@@ -4,7 +4,9 @@ task_1:
   name: My First Task!
   is_done: false
   user: user_1
+  tags: user_1_tag_one, user_1_tag_two
 
 task_2:
   name: Hello World!
   user: user_1
+  tags: user_1_tag_one
