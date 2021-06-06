@@ -5,5 +5,7 @@ class Tag < ApplicationRecord
 
   belongs_to :user
 
+  # rubocop:disable Rails/HasAndBelongsToMany
   has_and_belongs_to_many :tasks
+  # rubocop:enable Rails/HasAndBelongsToMany
 end
