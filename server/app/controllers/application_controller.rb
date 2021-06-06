@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # header: { 'Authorization': 'Bearer <token>' }
 
 class ApplicationController < ActionController::API
@@ -38,11 +40,12 @@ class ApplicationController < ActionController::API
   end
 
   private
-    def secret_key
-      if ENV['RAILS_ENV'] == "test"
-        "test-env-password"
-      else
-        Rails.application.credentials.secret_key
-      end
+
+  def secret_key
+    if ENV['RAILS_ENV'] == 'test'
+      'test-env-password'
+    else
+      Rails.application.credentials.secret_key
     end
+  end
 end
