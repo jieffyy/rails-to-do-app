@@ -8,10 +8,23 @@ class DoneAtDateTime < ActiveModel::Validator
     end
 end
 
+class UsedPersonalTags < ActiveModel::Validator
+    def validate(record)
+        if record.tags.size > 0 and record.tags.select { |t| t.user.id != record.user.id }.size != 0
+            record.errors.add :tags, "One or more of the given tags do not belong to the user"
+        end
+    end
+end
+
 class Task < ApplicationRecord
     include ActiveModel::Validations
+
     validates :name, presence: true
+
     validates_with DoneAtDateTime
 
     belongs_to :user
+
+    has_and_belongs_to_many :tags
+    validates_with UsedPersonalTags
 end
