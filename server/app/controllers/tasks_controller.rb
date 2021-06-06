@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
+# Controller for tasks
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :update, :destroy]
+  before_action :set_task, only: %i[show update destroy]
 
   # GET /tasks
   def index
@@ -31,10 +34,10 @@ class TasksController < ApplicationController
 
   # PATCH/PUT /tasks/1
   def update
-    if @task && @task.update(task_params)
+    if @task&.update(task_params)
       render json: @task
     else
-      render json: {} , status: :not_found
+      render json: {}, status: :not_found
     end
   end
 
@@ -48,13 +51,14 @@ class TasksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_task
-      @task = Task.where({ user_id: @user.id, id: params[:id] }).take
-    end
 
-    # Only allow a list of trusted parameters through.
-    def task_params
-      params.require(:task).permit(:name, :is_done)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_task
+    @task = Task.where({ user_id: @user.id, id: params[:id] }).take
+  end
+
+  # Only allow a list of trusted parameters through.
+  def task_params
+    params.require(:task).permit(:name, :is_done)
+  end
 end

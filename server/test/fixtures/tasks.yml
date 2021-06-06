@@ -1,12 +1,12 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-task_1:
+task1:
   name: My First Task!
   is_done: false
-  user: user_1
-  tags: user_1_tag_one, user_1_tag_two
+  user: user1
+  tags: user1One, user1Two
 
-task_2:
+task2:
   name: Hello World!
-  user: user_1
-  tags: user_1_tag_one
+  user: user1
+  tags: user1One

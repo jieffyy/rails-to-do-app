@@ -1,13 +1,13 @@
 #. Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-user_1_tag_one:
+user1One:
   name: High Priority
-  user: user_1
+  user: user1
 
-user_1_tag_two:
+user1Two:
   name: Deliverable
-  user: user_1
+  user: user1
 
-user_2_tag_one:
+user2One:
   name: Important
-  user: user_2
+  user: user2
