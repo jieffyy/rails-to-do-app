@@ -1,1 +1,6 @@
-require: rubocop-rails
+require:
+  - rubocop-i18n
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rake
+  - rubocop-rspec
