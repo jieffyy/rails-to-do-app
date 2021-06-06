@@ -2,6 +2,7 @@
 
 # header: { 'Authorization': 'Bearer <token>' }
 
+# Helper methods to run before most routes (e.g. authorisation)
 class ApplicationController < ActionController::API
   before_action :authorized
 
