@@ -4,6 +4,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 
+# Module for test configurations
 module ActiveSupport
   # Configure tests
   class TestCase
