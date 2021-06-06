@@ -3,3 +3,7 @@
 user_1:
   username: "User1"
   password_digest: <%= BCrypt::Password.create('OhNoItsPassword') %>
+
+user_2:
+  username: "User2"
+  password_digest: <%= BCrypt::Password.create('PasswordGenie') %>
