@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for tasks
 class TasksController < ApplicationController
   before_action :set_task, only: %i[show update destroy]
 

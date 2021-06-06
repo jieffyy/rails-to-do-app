@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for tags
 class TagsController < ApplicationController
   before_action :set_tag, only: %i[show update destroy]
 

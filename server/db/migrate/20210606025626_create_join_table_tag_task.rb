@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Allow task to be taggable
 class CreateJoinTableTagTask < ActiveRecord::Migration[6.1]
   def change
     create_join_table :tags, :tasks do |t|

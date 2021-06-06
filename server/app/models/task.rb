@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Validates that the doneAt field is valid
 class DoneAtDateTime < ActiveModel::Validator
   def validate(record)
     if record.is_done && !record.done_at
@@ -10,6 +11,7 @@ class DoneAtDateTime < ActiveModel::Validator
   end
 end
 
+# Validates that the task is tagged with the user's tags
 class UsedPersonalTags < ActiveModel::Validator
   def validate(record)
     if record.tags.size.positive? && !record.tags.reject { |t| t.user.id == record.user.id }.empty?
@@ -18,6 +20,7 @@ class UsedPersonalTags < ActiveModel::Validator
   end
 end
 
+# Model for task
 class Task < ApplicationRecord
   include ActiveModel::Validations
 
