@@ -14,9 +14,9 @@ end
 # Validates that the task is tagged with the user's tags
 class UsedPersonalTags < ActiveModel::Validator
   def validate(record)
-    if record.tags.size.positive? && !record.tags.reject { |t| t.user.id == record.user.id }.empty?
-      record.errors.add :tags, 'One or more of the given tags do not belong to the user'
-    end
+    return unless record.tags.size.positive? && !record.tags.reject { |t| t.user.id == record.user.id }.empty?
+
+    record.errors.add :tags, 'One or more of the given tags do not belong to the user'
   end
 end
 
