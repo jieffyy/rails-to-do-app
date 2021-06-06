@@ -35,12 +35,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'able to authenticate user with correct pwd' do
-    user_1 = users(:user_1)
-    assert user_1.authenticate('OhNoItsPassword')
+    user1 = users(:user1)
+    assert user1.authenticate('OhNoItsPassword')
   end
 
   test 'unable to authenticate user with wrong pwd' do
-    user_1 = users(:user_1)
-    assert_not user_1.authenticate('NotRight')
+    user1 = users(:user1)
+    assert_not user1.authenticate('NotRight')
   end
 end

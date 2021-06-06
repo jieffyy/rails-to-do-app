@@ -4,7 +4,7 @@ require 'test_helper'
 
 class TagTest < ActiveSupport::TestCase
   setup do
-    @user = users(:user_1)
+    @user = users(:user1)
   end
 
   test 'valid_tag with name and user' do

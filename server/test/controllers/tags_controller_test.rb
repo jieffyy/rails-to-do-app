@@ -4,7 +4,7 @@ require 'test_helper'
 
 class TagsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @tag = tags(:user_1_tag_one)
+    @tag = tags(:user1One)
     @token = login('User1', 'OhNoItsPassword')
   end
 

@@ -4,7 +4,7 @@ require 'test_helper'
 
 class TaskTest < ActiveSupport::TestCase
   setup do
-    @user = users(:user_1)
+    @user = users(:user1)
   end
 
   test 'valid task with just name' do
@@ -47,7 +47,7 @@ class TaskTest < ActiveSupport::TestCase
   test "invalid task with another user's tags" do
     @task = Task.new(name: 'Hello!', is_done: false)
     @task.user = @user
-    @task.tags = users(:user_2).tags
+    @task.tags = users(:user2).tags
     assert @task.invalid?
   end
 end

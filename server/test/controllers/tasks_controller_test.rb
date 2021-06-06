@@ -4,7 +4,7 @@ require 'test_helper'
 
 class TasksControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @task = tasks(:task_1)
+    @task = tasks(:task1)
     @token = login('User1', 'OhNoItsPassword')
   end
 
